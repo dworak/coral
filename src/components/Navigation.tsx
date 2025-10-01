@@ -30,7 +30,7 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="sticky top-0 z-50 bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -87,7 +87,7 @@ export default function Navigation() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden">
+        <div className="sm:hidden absolute top-16 left-0 right-0 z-40 bg-white border-b shadow-lg">
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
@@ -111,10 +111,7 @@ export default function Navigation() {
             })}
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
-            <div className="flex items-center justify-between px-4">
-              <div className="flex items-center justify-center">
-                <SolarLogo width={100} height={24} className="h-6" />
-              </div>
+            <div className="flex items-center justify-center px-4">
               <Badge variant="outline">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                 System Online

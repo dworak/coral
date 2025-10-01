@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts';
 import { apiClient } from '@/lib/api';
 import { Installation, Client, ProcessIssue } from '@/types';
 import { Zap, TrendingUp, AlertTriangle, Users, Activity, Sun } from 'lucide-react';
@@ -47,13 +47,18 @@ export default function Dashboard() {
 
   // Mock data for charts
   const powerTrendData = [
-    { time: '00:00', power: 0 },
-    { time: '04:00', power: 0 },
-    { time: '08:00', power: 15.2 },
-    { time: '12:00', power: 45.8 },
-    { time: '16:00', power: 38.4 },
-    { time: '20:00', power: 8.2 },
-    { time: '24:00', power: 0 },
+    { time: '00:00', power: 0, optimal: 0 },
+    { time: '04:00', power: 0, optimal: 0 },
+    { time: '06:00', power: 2.1, optimal: 5.2 },
+    { time: '08:00', power: 15.2, optimal: 18.5 },
+    { time: '10:00', power: 28.7, optimal: 32.1 },
+    { time: '12:00', power: 45.8, optimal: 48.2 },
+    { time: '14:00', power: 42.3, optimal: 45.8 },
+    { time: '16:00', power: 38.4, optimal: 35.2 },
+    { time: '18:00', power: 18.7, optimal: 22.1 },
+    { time: '20:00', power: 8.2, optimal: 12.5 },
+    { time: '22:00', power: 1.5, optimal: 3.2 },
+    { time: '24:00', power: 0, optimal: 0 },
   ];
 
   const monthlyProductionData = [
@@ -154,7 +159,7 @@ export default function Dashboard() {
               <CardHeader>
                 <CardTitle>Daily Power Trend</CardTitle>
                 <CardDescription>
-                  Average power generation throughout the day
+                  Actual vs optimal power generation throughout the day
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -163,8 +168,30 @@ export default function Dashboard() {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time" />
                     <YAxis />
-                    <Tooltip formatter={(value: number) => [`${value} kW`, 'Power']} />
-                    <Line type="monotone" dataKey="power" stroke="#8884d8" strokeWidth={2} />
+                    <Tooltip 
+                      formatter={(value: number, name: string) => [
+                        `${value} kW`, 
+                        name === 'power' ? 'Actual Power' : name === 'optimal' ? 'Optimal Power' : name
+                      ]} 
+                    />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="power" 
+                      stroke="#8884d8" 
+                      strokeWidth={2}
+                      name="Actual Power"
+                      dot={{ fill: '#8884d8', strokeWidth: 2, r: 4 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="optimal" 
+                      stroke="#10b981" 
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      name="Optimal Power"
+                      dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -210,12 +237,12 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="text-center p-4 border rounded-lg">
                   <div className="text-2xl font-bold text-green-600">2,450 kWh</div>
-                  <div className="text-sm text-muted-foreground">Today's Production</div>
+                  <div className="text-sm text-muted-foreground">Today&apos;s Production</div>
                   <Sun className="h-4 w-4 mx-auto mt-2 text-green-600" />
                 </div>
                 <div className="text-center p-4 border rounded-lg">
                   <div className="text-2xl font-bold text-blue-600">1,820 kWh</div>
-                  <div className="text-sm text-muted-foreground">Today's Consumption</div>
+                  <div className="text-sm text-muted-foreground">Today&apos;s Consumption</div>
                   <Activity className="h-4 w-4 mx-auto mt-2 text-blue-600" />
                 </div>
                 <div className="text-center p-4 border rounded-lg">
