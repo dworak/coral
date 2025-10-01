@@ -71,6 +71,13 @@ export default function InstallationDetail({ installationId }: InstallationDetai
   }
 
   const { installation, currentPower, autokonsumpcja, energyImported, energyExported, powerHistory, weatherData } = detail;
+  
+  // Debug: log the data to see if it's being loaded
+  console.log('Installation Detail Data:', {
+    installation,
+    powerHistory: powerHistory?.length || 0,
+    weatherData: weatherData?.length || 0
+  });
 
   return (
     <div className="space-y-6">
@@ -175,26 +182,36 @@ export default function InstallationDetail({ installationId }: InstallationDetai
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <ComposedChart data={powerHistory}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="timestamp" 
-                    tickFormatter={(value) => new Date(value).toLocaleTimeString()}
-                  />
-                  <YAxis yAxisId="power" orientation="left" />
-                  <YAxis yAxisId="irradiation" orientation="right" />
-                  <Tooltip 
-                    formatter={(value: number, name: string) => [
-                      `${value.toFixed(1)} ${name === 'power' ? 'kW' : 'W/m²'}`,
-                      name === 'power' ? 'Power' : 'Irradiation'
-                    ]}
-                    labelFormatter={(value) => new Date(value).toLocaleString()}
-                  />
-                  <Bar yAxisId="irradiation" dataKey="irradiation" fill="#ffc658" name="irradiation" />
-                  <Line yAxisId="power" type="monotone" dataKey="power" stroke="#8884d8" strokeWidth={2} name="power" />
-                </ComposedChart>
-              </ResponsiveContainer>
+              {powerHistory && powerHistory.length > 0 ? (
+                <ResponsiveContainer width="100%" height={400}>
+                  <ComposedChart data={powerHistory}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="timestamp" 
+                      tickFormatter={(value) => new Date(value).toLocaleTimeString()}
+                    />
+                    <YAxis yAxisId="power" orientation="left" />
+                    <YAxis yAxisId="irradiation" orientation="right" />
+                    <Tooltip 
+                      formatter={(value: number, name: string) => [
+                        `${value.toFixed(1)} ${name === 'power' ? 'kW' : 'W/m²'}`,
+                        name === 'power' ? 'Power' : 'Irradiation'
+                      ]}
+                      labelFormatter={(value) => new Date(value).toLocaleString()}
+                    />
+                    <Bar yAxisId="irradiation" dataKey="irradiation" fill="#ffc658" name="irradiation" />
+                    <Line yAxisId="power" type="monotone" dataKey="power" stroke="#8884d8" strokeWidth={2} name="power" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-64 text-muted-foreground">
+                  <div className="text-center">
+                    <Activity className="h-12 w-12 mx-auto mb-4" />
+                    <p>No power data available</p>
+                    <p className="text-sm">Data will appear when the installation is active</p>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

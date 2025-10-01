@@ -158,7 +158,7 @@ export default function InstallationsPage() {
       {/* Installations Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {installations.map((installation) => (
-          <Card key={installation.id} className="hover:shadow-lg transition-shadow">
+          <Card key={installation.id} className="hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{installation.name}</CardTitle>
@@ -171,7 +171,7 @@ export default function InstallationsPage() {
                 {installation.location}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="flex-1 flex flex-col space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground">Installed Power</div>
@@ -183,13 +183,13 @@ export default function InstallationsPage() {
                 </div>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-2 flex-1">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Current Power:</span>
                   <span className="font-medium">15.2 kW</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Today's Production:</span>
+                  <span className="text-muted-foreground">Today&apos;s Production:</span>
                   <span className="font-medium">245 kWh</span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -200,7 +200,7 @@ export default function InstallationsPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t">
+              <div className="pt-4 border-t mt-auto">
                 <div className="flex space-x-2">
                   <Button asChild size="sm" className="flex-1">
                     <Link href={`/installations/${installation.id}`}>
