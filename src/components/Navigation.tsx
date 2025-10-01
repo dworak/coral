@@ -8,14 +8,16 @@ import { Badge } from '@/components/ui/badge';
 import { 
   BarChart3, 
   Home, 
-  Settings, 
   FileText, 
   AlertTriangle, 
   Menu,
   X,
-  Zap
+  Zap,
+  LogOut,
+  User
 } from 'lucide-react';
 import SolarLogo from './SolarLogo';
+import { useAuth } from '@/hooks/useAuth';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: Home },
@@ -28,6 +30,7 @@ const navigation = [
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user, logout, isAdmin } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm border-b">
@@ -58,15 +61,34 @@ export default function Navigation() {
             </div>
           </div>
           
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <Badge variant="outline" className="mr-4">
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            <Badge variant="outline">
               <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
               System Online
             </Badge>
-            <Button variant="outline" size="sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Settings
-            </Button>
+            
+            {user && (
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <User className="h-4 w-4" />
+                  <span>{user.email}</span>
+                  {isAdmin && (
+                    <Badge variant="secondary" className="text-xs">
+                      Admin
+                    </Badge>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={logout}
+                  className="flex items-center space-x-1"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Wyloguj</span>
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="sm:hidden flex items-center">
@@ -111,11 +133,36 @@ export default function Navigation() {
             })}
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
-            <div className="flex items-center justify-center px-4">
-              <Badge variant="outline">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                System Online
-              </Badge>
+            <div className="px-4 space-y-3">
+              <div className="flex items-center justify-center">
+                <Badge variant="outline">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                  System Online
+                </Badge>
+              </div>
+              
+              {user && (
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2 text-sm text-gray-700 px-2">
+                    <User className="h-4 w-4" />
+                    <span>{user.email}</span>
+                    {isAdmin && (
+                      <Badge variant="secondary" className="text-xs">
+                        Admin
+                      </Badge>
+                    )}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={logout}
+                    className="w-full flex items-center justify-center space-x-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Wyloguj</span>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
