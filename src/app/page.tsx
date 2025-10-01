@@ -8,6 +8,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { apiClient } from '@/lib/api';
 import { Installation, Client, ProcessIssue } from '@/types';
 import { Zap, TrendingUp, AlertTriangle, Users, Activity, Sun } from 'lucide-react';
+import ActivePowerClock from '@/components/ActivePowerClock';
+import WeatherCard from '@/components/WeatherCard';
 
 export default function Dashboard() {
   const [installations, setInstallations] = useState<Installation[]>([]);
@@ -145,7 +147,8 @@ export default function Dashboard() {
           <TabsTrigger value="issues">Issues</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview" className="space-y-6">
+          {/* Second Row - Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -187,6 +190,11 @@ export default function Dashboard() {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
+          </div>
+          {/* First Row - Clock and Weather Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ActivePowerClock />
+            <WeatherCard />
           </div>
         </TabsContent>
 
